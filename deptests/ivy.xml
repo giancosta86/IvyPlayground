@@ -1,0 +1,459 @@
+<ivy-module version="2.0">
+    <!--
+    Required module coordinates
+    -->
+    <info
+        organisation="info.gianlucacosta"
+        module="ivyplayground-deptests"
+        revision="2.8" />
+
+    <!--
+    This defines our configurations.
+    They are all public by default
+    -->
+    <configurations>
+        <conf name="omicron" />
+        <conf name="rho" />
+        <conf name="sigma" />
+        <conf name="tau" />
+    </configurations>
+
+    <!--
+    This module does not publish any artifact - only
+    the module descriptor
+    -->
+    <publications />
+
+
+
+    <!-- GALLERY OF EXAMPLE DEPENDENCIES -->
+
+
+    <!--
+    This dependency is just for "omicron" (the defaultconf), because the
+    dependency's conf attribute is missing.
+    The configurations on which it depends are "a", "b", "c" (explicit)
+    and "e" (implicit, via *->e), all provided by the defaultconfmapping
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        defaultconfmapping="omicron,rho->a,b,c;sigma->d;*->e"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This fails, because the defaultconf is "omicron" and, since there is
+    no defaultconfmapping, Ivy maps omicron->omicron (and "omicron" is
+    not a configuration in the dependency module)
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+             />
+    </dependencies>
+    -->
+
+
+    <!--
+    This fails, too - because the defaultconf is "omicron", which does not match
+    any left side in defaultconfmapping, so Ivy maps omicron->omicron (and "omicron" is
+    not a configuration in the dependency module)
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        defaultconfmapping="sigma->e"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+             />
+    </dependencies>
+    -->
+
+
+    <!--
+    Since the dependency has no conf attribute, and both
+    defaultconfmapping and defaultconf are missing,
+    Ivy maps *->*, so EVERY configuration in this module
+    depends on EVERY configuration of the other module
+    -->
+    <!--
+    <dependencies>
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+             />
+    </dependencies>
+    -->
+
+
+    <!--
+    This dependency belongs to the "rho" configuration, as declared by
+    the conf attribute of the dependency tag; the mapping is
+    provided by defaultconfmappings, which is composite: "rho" matches
+    with rho->a,b,c and *->e, so it gets "a", "b", "c" and "e"
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        defaultconfmapping="omicron,rho->a,b,c;sigma->d;*->e"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This fails because the dependency belongs to the "rho" configuration,
+    but it does not match any left side in defaultconfmapping, so
+    Ivy maps rho->rho - and "rho" is not a configuration in the other module
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        defaultconfmapping="omicron->a,b,c;sigma->d"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This fails because the dependency belongs to the "rho" configuration, but
+    there is no defaultconfmapping, so Ivy maps rho->rho - but there is no "rho"
+    configuration in the other module
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This dependency declares an explicit rho->c mapping, which is
+    applied by Ivy - therefore bypassing defaultconfmapping
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        defaultconfmapping="omicron->a, rho->b"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho->c"
+             />
+    </dependencies>
+    -->
+
+
+    <!--
+    This fails because the "shadow" configuration is private
+    within the other module, so it can't be referenced!
+    -->
+    <!--
+    <dependencies>
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho->shadow"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This dependency belongs to both "rho" and "omicron",
+    using the explicit mappings provided; defaultconfmapping
+    is ignored
+    -->
+    <!--
+    <dependencies
+        defaultconf="omicron"
+        defaultconfmapping="omicron->a, rho->b, sigma->d"
+        >
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho->c;omicron->d"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This retrieves a specific version of junit-jupiter-api
+    from Maven Central and assigns it to "omicron" and "sigma".
+    Both configurations will receive the dependency's master
+    artifact as well as its transitive dependencies
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.0"
+                conf="omicron,sigma->default"
+                />
+    </dependencies>
+    -->
+
+    <!--
+    This gets the very latest revision - having release status -
+    provided by "junit-jupiter-api" and assigns it to "rho"
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="latest.release"
+                conf="rho->default"
+                />
+    </dependencies>
+    -->
+
+    <!--
+    Thanks to the default conflict manager,
+    just the latest (by version) of the 3 dependencies
+    is selected and assigned to the "tau" configuration
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.0"
+                conf="tau->default"
+                />
+
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.2.0"
+                conf="tau->default"
+                />
+
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.1"
+                conf="tau->default"
+                />
+    </dependencies>
+    -->
+
+    <!--
+    This fails because the "strict" conflict manager
+    prevents multiple revisions of the same module
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.0"
+                conf="tau->default"
+                />
+
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.2.0"
+                conf="tau->default"
+                />
+
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.1"
+                conf="tau->default"
+                />
+
+        <conflict manager="strict" />
+    </dependencies>
+    -->
+
+    <!--
+    The "all" conflict manager does not filter any
+    conflicting revision: they are all assigned to
+    the "tau" configuration
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.0"
+                conf="tau->default"
+                />
+
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.2.0"
+                conf="tau->default"
+                />
+
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.1.1"
+                conf="tau->default"
+                />
+
+        <conflict manager="all" />
+    </dependencies>
+    -->
+
+    <!--
+    This selects the latest version of junit-jupiter-api
+    >= 5.1.0 and also < 6.0
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="[5.1.0,6.0)"
+                conf="tau->default"
+                />
+    </dependencies>
+    -->
+
+
+    <!--
+    This selects the latest version of junit-jupiter-api
+    >= 5.0 and also < 6.0
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.+"
+                conf="tau->default"
+                />
+    </dependencies>
+    -->
+
+
+    <!--
+    The range always selects only the latest
+    version available, even BEFORE the
+    conflict manager
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="[5.1.0,6.0)"
+                conf="tau->default"
+                />
+
+        <conflict manager="all" />
+    </dependencies>
+    -->
+
+
+    <!--
+    The + always selects only the latest
+    version available, even BEFORE consulting the
+    conflict manager
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.+"
+                conf="tau->default"
+                />
+
+        <conflict manager="all" />
+    </dependencies>
+    -->
+
+    <!--
+    This fails because the dependency's conf is tau,
+    there is no matching mapping in defaultconf,
+    so Ivy maps tau->tau - and "tau" is not a
+    public configuration in converted Maven modules
+    -->
+    <!--
+    <dependencies>
+        <dependency org="org.junit.jupiter"
+                name="junit-jupiter-api"
+                rev="5.+"
+                conf="tau"
+                />
+    </dependencies>
+    -->
+
+
+    <!--
+    The mappings rho->b and sigma->d are clear;
+    "omicron" and "tau" remain unmapped, so
+    %->e becomes omicron,tau->e
+    -->
+    <!--
+    <dependencies>
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="rho->b;sigma->d;%->e"
+             />
+    </dependencies>
+    -->
+
+
+    <!--
+    The mapping tries to map each configuration
+    in this module to a configuration having the
+    same name in the dependency; as this is impossible
+    in all of our cases, the mapping becomes
+    equivalent to *->d.
+    -->
+    <!--
+    <dependencies>
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="*->@(d)"
+             />
+    </dependencies>
+    -->
+
+    <!--
+    This mapping just retrieves the two artifacts
+    published by the "vowels" dependency configuration
+    and assigns them to the "sigma" master configuration
+    -->
+    <dependencies>
+        <dependency
+            org="info.gianlucacosta"
+            name="ivyplayground-basic"
+            rev="1.5"
+            conf="sigma->vowels"
+             />
+    </dependencies>
+</ivy-module>

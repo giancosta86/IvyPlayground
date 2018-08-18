@@ -1,0 +1,36 @@
+<ivysettings>
+    <!--
+    This includes the default settings provided by Ivy
+    -->
+    <include url="${ivy.default.settings.dir}/ivysettings.xml"/>
+
+    <!--
+    This includes the configuration enabling Ivy to run
+    multiple projects in parallel without corrupting
+    Ivy's cache system
+    -->
+    <include file="${basedir}/../caching.xml" />
+
+    <settings defaultResolver="local-m2" />
+
+    <resolvers>
+        <!--
+        Defines Maven's local repository.
+        Please, note the "m2compatible" attribute set to true,
+        as well as the "artifact" tags to define the access patterns
+        -->
+        <filesystem name="local-m2"
+                    m2compatible="true">
+
+            <!--
+            This pattern is paramount - otherwise, Ivy won't be able to
+            find the POM and will generate an almost useless Ivy descriptor
+            within the cache - therefore losing all the Maven scopes
+            and dependencies
+            -->
+            <ivy pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[module]-[revision].pom" />
+
+            <artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+        </filesystem>
+    </resolvers>
+</ivysettings>

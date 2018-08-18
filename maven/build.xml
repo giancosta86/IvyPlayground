@@ -1,0 +1,58 @@
+<project name="maven"
+    xmlns:ivy="antlib:org.apache.ivy.ant" >
+
+  <description>
+    Maven publication project
+  </description>
+
+  <target name="clean">
+    <delete dir="lib" />
+  </target>
+
+  <!--
+    Retrieves dependencies - storing them in the "lib" directory.
+  -->
+  <target name="getDependencies" depends="clean">
+
+    <!--
+    Every configuration in this module has a dedicated subdirectory
+    of the "lib" directory, containing all of its dependencies.
+    Retrieving does NOT require an explicit resolve
+    -->
+    <ivy:retrieve pattern="lib/[conf]/[artifact](-[revision])(.[ext])" />
+  </target>
+
+  <!--
+  Publishes the artifacts (and the POM) to Maven's local repository.
+
+  Please, notice that we did NOT need to call <ivy:resolve />, because
+  resolution is implicitly performed by <ivy:retrieve />
+  -->
+  <target name="pub" depends="getDependencies">
+    <!--
+    Creates a basic POM file from the Ivy descriptor
+    -->
+    <ivy:makepom
+      ivyfile="ivy.xml"
+      pomfile="dist/${ant.project.name}.pom"
+    />
+
+    <!--
+    Publishes the artifacts to the local Maven repository.
+    Since we want strict Maven compatibility,
+    the "publishivy" property is set to false.
+    -->
+    <ivy:publish resolver="local-m2" overwrite="true" publishivy="false">
+      <!--
+      This matches the master JAR file
+      -->
+      <artifacts pattern="pool/[artifact].[ext]" />
+
+
+      <!--
+      This matches the POM
+      -->
+      <artifacts pattern="dist/${ant.project.name}.[ext]" />
+    </ivy:publish>
+  </target>
+</project>

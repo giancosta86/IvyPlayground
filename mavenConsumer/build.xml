@@ -1,0 +1,37 @@
+<project name="mavenConsumer"
+  xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <description>
+    Ivy project using the Ivy-generated Maven artifact
+  </description>
+
+  <target name="clean">
+    <delete dir="lib" />
+  </target>
+
+  <!--
+    Retrieves dependencies - storing them in the "lib" directory.
+  -->
+  <target name="getDependencies" depends="clean">
+
+    <!--
+    Every configuration in this module has a dedicated subdirectory
+    of the "lib" directory, containing all of its dependencies.
+    Retrieving does NOT require an explicit resolve
+    -->
+    <ivy:retrieve pattern="lib/[conf]/[artifact](-[revision])(.[ext])" />
+  </target>
+
+  <!--
+  This target will not publish any artifact - just the module descriptor -
+  because the "publications" block within ivy.xml is empty.
+
+  Please, notice that we did NOT need to call <ivy:resolve />, because
+  resolution is implicitly performed by <ivy:retrieve />
+  -->
+  <target name="pub" depends="getDependencies">
+    <ivy:publish resolver="local" overwrite="true">
+      <artifacts pattern="dist/[artifact].[ext]" />
+    </ivy:publish>
+  </target>
+</project>

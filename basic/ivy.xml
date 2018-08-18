@@ -1,0 +1,49 @@
+<ivy-module version="2.0">
+    <!--
+    Required module coordinates
+    -->
+    <info
+        organisation="info.gianlucacosta"
+        module="ivyplayground-basic"
+        revision="1.5" />
+
+    <!--
+    This defines our configurations.
+    They are all public by default
+    -->
+    <configurations>
+        <conf name="a" />
+        <conf name="b" />
+        <conf name="c" />
+        <conf name="d" />
+        <conf name="e" />
+
+        <conf name="vowels" />
+
+        <!--
+        This configuration cannot be referenced by other modules.
+        However, you can use it in this module - for example,
+        to retrieve a specific set of dependencies
+        -->
+        <conf name="shadow" visibility="private" />
+    </configurations>
+
+    <!--
+    This defines our published artifacts.
+
+    Each configuration provides an artifact, except "vowels" that provides
+    2 artifacts: "doc_a.txt" and "doc_e.txt"
+    -->
+    <publications>
+        <artifact name="doc_a" type="txt" conf="a,vowels" />
+        <artifact name="doc_b" type="txt" conf="b" />
+        <artifact name="doc_c" type="txt" conf="c" />
+        <artifact name="doc_d" type="txt" conf="d" />
+
+        <!--
+        The "ext" attribute here is explicit but superfluous,
+        as it defaults to the value of "type"
+        -->
+        <artifact name="doc_e" ext="txt" type="txt" conf="e,vowels" />
+    </publications>
+</ivy-module>

@@ -1,0 +1,53 @@
+<!--
+Example Maven project depending on a Maven artifact published by Ivy
+
+By running:
+
+mvn package
+
+you will notice that this project correctly detects
+the master artifact of the Ivy-generated Maven project,
+as well as its transitive dependencies
+-->
+
+<project xmlns = "http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0
+   http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>info.gianlucacosta</groupId>
+   <artifactId>real-maven</artifactId>
+   <version>1.0</version>
+
+   <dependencies>
+        <dependency>
+            <groupId>info.gianlucacosta</groupId>
+            <artifactId>ivyplayground-maven</artifactId>
+            <version>3.7</version>
+        </dependency>
+   </dependencies>
+
+
+   <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>copy-dependencies</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>copy-dependencies</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        <overWriteReleases>true</overWriteReleases>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+   </build>
+</project>

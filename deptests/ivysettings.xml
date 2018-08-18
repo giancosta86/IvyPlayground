@@ -1,0 +1,13 @@
+<ivysettings>
+    <!--
+    This includes the default settings provided by Ivy
+    -->
+    <include url="${ivy.default.settings.dir}/ivysettings.xml"/>
+
+    <!--
+    This includes the configuration enabling Ivy to run
+    multiple projects in parallel without corrupting
+    Ivy's cache system
+    -->
+    <include file="${basedir}/../caching.xml" />
+</ivysettings>

@@ -1,0 +1,24 @@
+<!--
+This file can be included into other settings files -
+as it provides a minimalist solution to Ivy's cache
+problem.
+
+In particular:
+
+* The "resolutionCacheDir" is set to a project-private
+  directory, ensuring that multiple projects can be
+  built in parallel - for example, by a CI server
+  like Jenkins. This directory, of course, should
+  be ignore by version-control systems such as Git
+
+* On the other hand, the "repositoryCacheDir" - which
+  requires space as it contains the artifacts - is shared,
+  but a NIO-based lock strategy is enforced to prevent
+  cache corruption
+-->
+<ivy-settings>
+   <caches
+     resolutionCacheDir="${basedir}/.ivy-cache"
+     repositoryCacheDir="${user.home}/.ivy2/repo-cache"
+     lockStrategy="artifact-lock-nio" />
+</ivy-settings>

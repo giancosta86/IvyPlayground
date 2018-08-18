@@ -1,0 +1,43 @@
+<project name="deptests"
+        xmlns:ivy="antlib:org.apache.ivy.ant">
+  <description>
+    What-if tests with dependencies
+  </description>
+
+  <target name="clean">
+    <delete dir="lib" />
+  </target>
+
+  <!--
+    Retrieves dependencies - storing them in the "lib" directory.
+  -->
+  <target name="getDependencies" depends="clean">
+
+    <!--
+    Every configuration in this module has a dedicated subdirectory
+    within the "lib" directory, containing all of its dependencies.
+    Retrieving does NOT require an explicit call to ivy:resolve
+    -->
+    <ivy:retrieve pattern="lib/[conf]/[artifact](-[revision])(.[ext])" />
+  </target>
+
+  <!--
+  This target will not publish any artifact - just the module descriptor -
+  because the "publications" block within ivy.xml is empty.
+
+  Please, notice that we did NOT need to call <ivy:resolve />, because
+  resolution is implicitly performed by <ivy:retrieve />
+  -->
+  <target name="pub" depends="getDependencies">
+    <ivy:publish resolver="local" overwrite="true">
+
+      <!--
+      This pattern will be used by Ivy to create the enriched "ivy.xml"
+      it will publish to the repo; in particular, such descriptor
+      includes the "publication" attribute containing the
+      timestamp of the current build process
+      -->
+      <artifacts pattern="dist/[artifact].[ext]" />
+    </ivy:publish>
+  </target>
+</project>

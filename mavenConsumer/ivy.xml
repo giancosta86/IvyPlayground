@@ -1,0 +1,32 @@
+<ivy-module version="2.0">
+    <!--
+    Required module coordinates
+    -->
+    <info
+        organisation="info.gianlucacosta"
+        module="ivyplayground-maven-consumer"
+        revision="2.8" />
+
+    <!--
+    With no explicit <configurations> tag,
+    Ivy creates a "default" public configuration
+    -->
+
+    <!--
+    This module does not publish any artifact - only
+    the module descriptor
+    -->
+    <publications />
+
+    <!--
+    The defaultconf attributes provides a handy
+    default->default mapping to the Maven dependency;
+    if you remove the attribute, you'll get a *->* mapping
+    -->
+    <dependencies defaultconf="default">
+        <dependency org="info.gianlucacosta"
+                name="ivyplayground-maven"
+                rev="3.7"
+                />
+    </dependencies>
+</ivy-module>

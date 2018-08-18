@@ -1,0 +1,28 @@
+<ivysettings>
+    <!--
+    This includes the default settings provided by Ivy
+    -->
+    <include url="${ivy.default.settings.dir}/ivysettings.xml"/>
+
+    <!--
+    This includes the configuration enabling Ivy to run
+    multiple projects in parallel without corrupting
+    Ivy's cache system
+    -->
+    <include file="${basedir}/../caching.xml" />
+
+
+    <resolvers>
+        <!--
+        Defines Maven's local repository.
+        Please, note the "m2compatible" attribute set to true,
+        as well as the "artifact" tag to define the access pattern
+        -->
+        <filesystem name="local-m2"
+                    m2compatible="true">
+
+            <artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+
+        </filesystem>
+    </resolvers>
+</ivysettings>

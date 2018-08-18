@@ -1,0 +1,76 @@
+<project
+  name="basic"
+  xmlns:ivy="antlib:org.apache.ivy.ant"
+>
+
+  <description>
+    Basic project publishing configurations to the "local" repository
+  </description>
+
+  <!--
+  ivysettings.xml is already in the project directory,
+  so the ivy:settings tag is optional
+  -->
+  <!--  <ivy:settings file="ivysettings.xml" /> -->
+
+
+  <!--
+  ivy.xml is already in the project directory,
+  so the ivy:info tag is optional
+  -->
+  <!-- <ivy:info file="ivy.xml"> -->
+
+
+  <!--
+  Resolving is a common activity - so you might want to
+  isolate it into a standalone Ant target, referenced
+  by other targets
+  -->
+  <target name="resolve">
+    <!-- Just call the ivy:resolve task -->
+    <ivy:resolve />
+  </target>
+
+
+
+  <!--
+  Publishing requires to call the resolution process
+  at least once, which is why we introduce the dependency
+  on the "resolve" target
+  -->
+  <target name="pub" depends="resolve">
+
+    <!--
+    This publishes our artifacts to the "local" repository
+    provided by Ivy's default settings.
+    The "overwrite" flag enables subsequent publications to
+    the same repository location
+    -->
+    <ivy:publish resolver="local" overwrite="true">
+      <!--
+      This pattern will be used by Ivy to create the enriched "ivy.xml"
+      it will publish to the repo; in particular, such descriptor
+      includes the "publication" attribute containing the
+      timestamp of the current build process
+      -->
+      <artifacts pattern="dist/[artifact].[ext]" />
+
+
+      <!--These tags tell Ivy that artifacts can be found in
+      "dist", "firstPool" or "secondPool", with no difference.
+
+      Each artifact is in a file identified by its name and extension,
+      maybe with a leading '_', in "firstPool" and "secondPool":
+      despite of this, because the "local" repository is
+      configured to locate (that is, both get and publish)
+      artifacts using just "[artifact].[ext]", all artifacts
+      will have NO leading _ in the repository
+      -->
+      <artifacts pattern="firstPool/[artifact].[ext]" />
+      <artifacts pattern="firstPool/_[artifact].[ext]" />
+
+      <artifacts pattern="secondPool/[artifact].[ext]" />
+      <artifacts pattern="secondPool/_[artifact].[ext]" />
+    </ivy:publish>
+  </target>
+</project>
